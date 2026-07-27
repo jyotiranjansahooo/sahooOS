@@ -1,7 +1,5 @@
-"use client";
-
-import Heroo from "./components/home/Heroo";
+import Desktop from "./components/desktop/Desktop";
 
 export default function Home() {
-  return <Heroo />;
+  return <Desktop />;
 }

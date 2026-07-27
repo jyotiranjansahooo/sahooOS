@@ -1,90 +1,220 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { ReactNode } from "react";
-import { X } from "lucide-react";
+import { ReactNode, useState } from "react";
+import { Rnd } from "react-rnd";
+import {
+  LuMinus,
+  LuSquare,
+  LuX,
+} from "react-icons/lu";
 
-type WindowProps = {
+import {
+  WindowName,
+  useWindows,
+} from "@/app/context/WindowContext";
+
+type Props = {
+  name: WindowName;
   title: string;
-  isOpen: boolean;
-  onClose: () => void;
   children: ReactNode;
+  onClose: () => void;
 };
 
 export default function Window({
+  name,
   title,
-  isOpen,
-  onClose,
   children,
-}: WindowProps) {
+  onClose,
+}: Props) {
+  const {
+    active,
+    focusWindow,
+    minimizeWindow,
+  } = useWindows();
+
+  const [maximized, setMaximized] =
+    useState(false);
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Overlay */}
-          <motion.div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
+    <Rnd
+      default={{
+        x: 200,
+        y: 70,
+        width: 900,
+        height: 560,
+      }}
+      size={
+        maximized
+          ? {
+              width: "100%",
+              height: "calc(100% - 56px)",
+            }
+          : undefined
+      }
+      position={
+        maximized
+          ? {
+              x: 0,
+              y: 0,
+            }
+          : undefined
+      }
+      disableDragging={maximized}
+      enableResizing={!maximized}
+      dragHandleClassName="window-header"
+      bounds="window"
+      minWidth={600}
+      minHeight={400}
+      onMouseDown={() =>
+        focusWindow(name)
+      }
+      style={{
+        zIndex:
+          active === name
+            ? 999
+            : 100,
+      }}
+    >
+      <div
+        className="
+        flex
+        h-full
+        flex-col
 
-          {/* Window */}
-          <motion.div
-            className="
-              fixed
-              left-1/2
-              top-1/2
-              z-50
-              w-[95%]
-              max-w-4xl
-              h-[80vh]
-              -translate-x-1/2
-              -translate-y-1/2
-              overflow-hidden
-              rounded-xl
-              border
-              border-[#33FF99]
-              bg-[#111827]
-              shadow-2xl
-            "
-            initial={{
-              scale: 0.8,
-              opacity: 0,
-            }}
-            animate={{
-              scale: 1,
-              opacity: 1,
-            }}
-            exit={{
-              scale: 0.9,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.25,
-            }}
-          >
-            {/* Title Bar */}
-            <header className="flex h-14 items-center justify-between border-b border-[#2F3A4D] bg-[#1A1F29] px-5">
-              <h2 className="font-semibold text-[#33FF99]">
-                {title}
-              </h2>
+        overflow-hidden
 
-              <button
-                onClick={onClose}
-                className="rounded-md p-2 transition hover:bg-red-500 hover:text-white"
-              >
-                <X size={18} />
-              </button>
-            </header>
+        rounded-xl
 
-            {/* Content */}
-            <div className="h-[calc(80vh-56px)] overflow-y-auto p-8">
-              {children}
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+        border
+
+        border-white/10
+
+        bg-[#0B1120]/95
+
+        shadow-[0_20px_60px_rgba(0,0,0,.55)]
+
+        backdrop-blur-xl
+      "
+      >
+        {/* HEADER */}
+
+        <div
+          className={`
+          window-header
+
+          flex
+
+          h-12
+
+          cursor-move
+
+          items-center
+
+          justify-between
+
+          px-4
+
+          transition
+
+          ${
+            active === name
+              ? "bg-violet-700"
+              : "bg-slate-800"
+          }
+        `}
+        >
+          <div className="flex items-center gap-3">
+
+            <div className="h-3 w-3 rounded-full bg-red-500" />
+
+            <div className="h-3 w-3 rounded-full bg-yellow-500" />
+
+            <div className="h-3 w-3 rounded-full bg-green-500" />
+
+            <span className="ml-3 font-semibold tracking-wide text-white">
+              {title}
+            </span>
+
+          </div>
+
+          <div className="flex">
+
+            <button
+              onClick={() =>
+                minimizeWindow(name)
+              }
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                text-white
+                transition
+                hover:bg-white/10
+              "
+            >
+              <LuMinus />
+            </button>
+
+            <button
+              onClick={() =>
+                setMaximized(
+                  !maximized
+                )
+              }
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                text-white
+                transition
+                hover:bg-white/10
+              "
+            >
+              <LuSquare />
+            </button>
+
+            <button
+              onClick={onClose}
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                text-white
+                transition
+                hover:bg-red-600
+              "
+            >
+              <LuX />
+            </button>
+
+          </div>
+        </div>
+
+        {/* BODY */}
+
+        <div
+          className="
+          flex-1
+
+          overflow-auto
+
+          bg-[#0F172A]
+
+          p-8
+
+          text-white
+        "
+        >
+          {children}
+        </div>
+
+      </div>
+    </Rnd>
   );
 }

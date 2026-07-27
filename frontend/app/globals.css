@@ -1,15 +1,30 @@
 @import "@fontsource/press-start-2p";
 
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: "Press Start 2P", monospace;
   background: #050505;
-  color: #00ff66;
-  overflow-x: hidden;
 }
-html {
-  scroll-behavior: smooth;
-}
+
 img {
   user-select: none;
   -webkit-user-drag: none;
+}
+
+button {
+  cursor: pointer;
 }
