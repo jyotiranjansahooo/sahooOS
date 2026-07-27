@@ -9,22 +9,21 @@ const skills = [
   "MongoDB",
   "Tailwind CSS",
   "JWT",
-  "Git",
-  "GitHub",
+  "GSAP",
 ];
 
 export default function Skills() {
   return (
-    <div className="rounded-xl border border-[#2F3A4D] bg-[#1A1F29] p-6">
-      <h2 className="mb-6 text-2xl font-bold text-[#33FF99]">
+    <div className="rounded-xl border border-[#4CF8A8]/30 bg-black/40 p-6 backdrop-blur">
+      <h3 className="mb-4 text-xl font-semibold text-[#4CF8A8]">
         Skills
-      </h2>
+      </h3>
 
       <div className="flex flex-wrap gap-3">
         {skills.map((skill) => (
           <span
             key={skill}
-            className="rounded-lg border border-[#33FF99] px-4 py-2"
+            className="rounded-full border border-[#4CF8A8]/40 px-4 py-2 text-sm text-white"
           >
             {skill}
           </span>

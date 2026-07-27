@@ -1,19 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import Boot from "@/app/components/retro/Boot/Boot";
-import Desktop from "@/app/components/desktop/desktop";
+import Heroo from "./components/home/Heroo";
 
-export default function HomePage() {
-  const [booted, setBooted] = useState(false);
-
-  const handleBoot = useCallback(() => {
-    setBooted(true);
-  }, []);
-
-  return booted ? (
-    <Desktop />
-  ) : (
-    <Boot onComplete={handleBoot} />
-  );
+export default function Home() {
+  return <Heroo />;
 }

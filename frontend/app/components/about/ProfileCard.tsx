@@ -2,25 +2,15 @@
 
 export default function ProfileCard() {
   return (
-    <div className="rounded-xl border border-[#2F3A4D] bg-[#1A1F29] p-6">
-      <div className="flex flex-col items-center">
+    <div className="rounded-xl border border-[#4CF8A8]/30 bg-black/40 p-6 backdrop-blur">
+      <h2 className="text-2xl font-bold text-[#4CF8A8]">
+        Jyoti Ranjan Sahoo
+      </h2>
 
-        <div className="h-36 w-36 rounded-full border-4 border-[#33FF99] bg-gray-700" />
-
-        <h1 className="mt-6 text-3xl font-bold">
-          Jyoti Ranjan Sahoo
-        </h1>
-
-        <p className="mt-2 text-[#33FF99]">
-          Full Stack Developer
-        </p>
-
-        <p className="mt-6 text-center text-gray-300">
-          Passionate Full Stack Developer specializing in
-          Next.js, React, Node.js, Express.js and MongoDB.
-        </p>
-
-      </div>
+      <p className="mt-4 leading-7 text-gray-300">
+        Full Stack Developer specializing in Next.js, React, Node.js,
+        Express.js, MongoDB, and Tailwind CSS.
+      </p>
     </div>
   );
 }

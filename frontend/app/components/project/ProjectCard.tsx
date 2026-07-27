@@ -1,54 +1,23 @@
-import { Project } from "@/app/types/project";
+"use client";
 
 type Props = {
-  project: Project;
+  title: string;
+  description: string;
 };
 
-export default function ProjectCard({ project }: Props) {
+export default function ProjectCard({
+  title,
+  description,
+}: Props) {
   return (
-    <div className="rounded-xl border border-[#2F3A4D] bg-[#1A1F29] p-6">
-      <img
-        src={project.image}
-        alt={project.title}
-        className="h-52 w-full rounded-lg object-cover"
-      />
+    <div className="rounded-xl border border-[#4CF8A8]/30 bg-black/40 p-6 backdrop-blur">
+      <h3 className="text-2xl font-bold text-[#4CF8A8]">
+        {title}
+      </h3>
 
-      <h2 className="mt-5 text-2xl font-bold text-[#33FF99]">
-        {project.title}
-      </h2>
-
-      <p className="mt-3 text-gray-300">
-        {project.description}
+      <p className="mt-4 leading-7 text-gray-300">
+        {description}
       </p>
-
-      <div className="mt-5 flex flex-wrap gap-2">
-        {project.techStack.map((tech) => (
-          <span
-            key={tech}
-            className="rounded-md border border-[#33FF99] px-3 py-1"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-
-      <div className="mt-6 flex gap-3">
-        <a
-          href={project.github}
-          target="_blank"
-          className="rounded-lg bg-[#33FF99] px-4 py-2 text-black"
-        >
-          GitHub
-        </a>
-
-        <a
-          href={project.live}
-          target="_blank"
-          className="rounded-lg border border-[#33FF99] px-4 py-2"
-        >
-          Live Demo
-        </a>
-      </div>
     </div>
   );
 }
