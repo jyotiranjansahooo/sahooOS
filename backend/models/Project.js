@@ -68,15 +68,33 @@ const projectSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    category: {
+      type: String,
+      default: "Full Stack",
+    },
 
     order: {
       type: Number,
       default: 0,
     },
+    status: {
+      type: String,
+      enum: ["Draft", "Published"],
+      default: "Published",
+    },
+    metaTitle: {
+  type: String,
+  default: "",
+},
+
+metaDescription: {
+  type: String,
+  default: "",
+},
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const Project =

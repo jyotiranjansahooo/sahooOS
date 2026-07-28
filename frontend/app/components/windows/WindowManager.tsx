@@ -1,32 +1,32 @@
 "use client";
 
+import { windowRegistry } from "@/app/data/windowRegistry";
 import { useWindows } from "@/app/context/WindowContext";
-
-import ProfileWindow from "./ProfileWindow";
-import ProjectsWindow from "./ProjectsWindow";
-import TerminalWindow from "./TerminalWindow";
-import ContactWindow from "./ContactWindow";
+import { WindowName } from "@/app/context/WindowContext";
 
 export default function WindowManager() {
   const { windows, closeWindow } = useWindows();
 
+  const openedWindows = (
+    Object.keys(windows) as WindowName[]
+  ).filter(
+    (name) =>
+      windows[name].opened &&
+      !windows[name].minimized
+  );
+
   return (
     <>
-      {windows.profile.opened && !windows.profile.minimized && (
-        <ProfileWindow onClose={() => closeWindow("profile")} />
-      )}
+      {openedWindows.map((name) => {
+      const Component = windowRegistry[name as keyof typeof windowRegistry];
 
-      {windows.projects.opened && !windows.projects.minimized && (
-        <ProjectsWindow onClose={() => closeWindow("projects")} />
-      )}
-
-      {windows.terminal.opened && !windows.terminal.minimized && (
-        <TerminalWindow onClose={() => closeWindow("terminal")} />
-      )}
-
-      {windows.contact.opened && !windows.contact.minimized && (
-        <ContactWindow onClose={() => closeWindow("contact")} />
-      )}
+        return (
+          <Component
+            key={name}
+            onClose={() => closeWindow(name)}
+          />
+        );
+      })}
     </>
   );
 }

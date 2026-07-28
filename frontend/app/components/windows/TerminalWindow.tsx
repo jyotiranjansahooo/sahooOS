@@ -10,11 +10,13 @@ type Props = {
 };
 
 export default function TerminalWindow({ onClose }: Props) {
-  const [history, setHistory] = useState<string[]>([
-    "Welcome to Sahoo OS",
-    "Type 'help' to begin.",
-    "",
-  ]);
+ const [history, setHistory] = useState<string[]>([
+  "Sahoo OS Terminal v1.0",
+  "Copyright (c) 2026 Jyoti Ranjan Sahoo",
+  "",
+  "Type 'help' to list commands.",
+  "",
+]);
 
   const [input, setInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -90,7 +92,7 @@ export default function TerminalWindow({ onClose }: Props) {
 
           <div className="mt-6 flex items-center">
             <span className="mr-3 whitespace-nowrap text-green-500">
-              jyoti@sahoo:~$
+              jyoti@sahooOS:~$
             </span>
             <input
               ref={inputRef}

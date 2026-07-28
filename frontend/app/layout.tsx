@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "@fontsource/press-start-2p";
 import { WindowProvider } from "./context/WindowContext";
+import { Toaster } from "react-hot-toast";
+import { ProjectProvider } from "./context/ProjectContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +34,20 @@ export default function RootLayout({
     >
       <body className="h-screen overflow-hidden">
         <ClerkProvider>
-          <WindowProvider>{children}</WindowProvider>
+          <ProjectProvider>
+
+          <WindowProvider>
+            {children}
+
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                duration: 3000,
+              }}
+            />
+          </WindowProvider>
+          </ProjectProvider>
+
         </ClerkProvider>
       </body>
     </html>

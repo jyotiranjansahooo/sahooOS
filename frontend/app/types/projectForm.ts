@@ -1,25 +1,17 @@
-export interface Project {
-  _id?: string;
-
+export interface ProjectFormValues {
   title: string;
-
   slug: string;
-
   shortDescription: string;
-
   description: string;
 
   thumbnail: string;
-
   images: string[];
 
-  technologies: string[];
-
-  features: string[];
-
   githubUrl: string;
-
   liveUrl: string;
+
+  technologies: string[];
+  features: string[];
 
   featured: boolean;
 
@@ -30,12 +22,5 @@ export interface Project {
   order: number;
 
   metaTitle: string;
-
   metaDescription: string;
-
-  createdAt?: string;
-
-  updatedAt?: string;
 }
-
-export type CreateProjectDto = Omit<Project, "_id" | "createdAt" | "updatedAt">;

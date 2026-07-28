@@ -1,19 +1,9 @@
 "use client";
 
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import { AppId, apps } from "@/app/data/apps";
 
-export type WindowName =
-  | "profile"
-  | "projects"
-  | "terminal"
-  | "contact"
-  | "resume";
+export type WindowName = AppId;
 
 type WindowState = {
   opened: boolean;
@@ -36,49 +26,24 @@ type ContextType = {
   focusWindow: (name: WindowName) => void;
 };
 
-const WindowContext =
-  createContext<ContextType | null>(null);
+const WindowContext = createContext<ContextType | null>(null);
 
-const initialWindows: Record<
-  WindowName,
-  WindowState
-> = {
-  profile: {
-    opened: false,
-    minimized: false,
+const initialWindows = apps.reduce(
+  (acc, app) => {
+    acc[app.id] = {
+      opened: false,
+      minimized: false,
+    };
+
+    return acc;
   },
+  {} as Record<WindowName, WindowState>
+);
 
-  projects: {
-    opened: false,
-    minimized: false,
-  },
+export function WindowProvider({ children }: { children: ReactNode }) {
+  const [windows, setWindows] = useState(initialWindows);
 
-  terminal: {
-    opened: false,
-    minimized: false,
-  },
-
-  contact: {
-    opened: false,
-    minimized: false,
-  },
-
-  resume: {
-    opened: false,
-    minimized: false,
-  },
-};
-
-export function WindowProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const [windows, setWindows] =
-    useState(initialWindows);
-
-  const [active, setActive] =
-    useState<WindowName | null>(null);
+  const [active, setActive] = useState<WindowName | null>(null);
 
   function openWindow(name: WindowName) {
     setWindows((prev) => ({
@@ -101,13 +66,10 @@ export function WindowProvider({
       },
     }));
 
-    if (active === name)
-      setActive(null);
+    if (active === name) setActive(null);
   }
 
-  function minimizeWindow(
-    name: WindowName
-  ) {
+  function minimizeWindow(name: WindowName) {
     setWindows((prev) => ({
       ...prev,
       [name]: {
@@ -116,13 +78,10 @@ export function WindowProvider({
       },
     }));
 
-    if (active === name)
-      setActive(null);
+    if (active === name) setActive(null);
   }
 
-  function restoreWindow(
-    name: WindowName
-  ) {
+  function restoreWindow(name: WindowName) {
     setWindows((prev) => ({
       ...prev,
       [name]: {
@@ -148,23 +107,18 @@ export function WindowProvider({
       restoreWindow,
       focusWindow,
     }),
-    [windows, active]
+    [windows, active],
   );
 
   return (
-    <WindowContext.Provider value={value}>
-      {children}
-    </WindowContext.Provider>
+    <WindowContext.Provider value={value}>{children}</WindowContext.Provider>
   );
 }
 
 export function useWindows() {
   const ctx = useContext(WindowContext);
 
-  if (!ctx)
-    throw new Error(
-      "WindowProvider missing"
-    );
+  if (!ctx) throw new Error("WindowProvider missing");
 
   return ctx;
 }

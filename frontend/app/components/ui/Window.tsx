@@ -2,16 +2,9 @@
 
 import { ReactNode, useState } from "react";
 import { Rnd } from "react-rnd";
-import {
-  LuMinus,
-  LuSquare,
-  LuX,
-} from "react-icons/lu";
+import { LuMinus, LuSquare, LuX } from "react-icons/lu";
 
-import {
-  WindowName,
-  useWindows,
-} from "@/app/context/WindowContext";
+import { WindowName, useWindows } from "@/app/context/WindowContext";
 
 type Props = {
   name: WindowName;
@@ -20,29 +13,25 @@ type Props = {
   onClose: () => void;
 };
 
-export default function Window({
-  name,
-  title,
-  children,
-  onClose,
-}: Props) {
-  const {
-    active,
-    focusWindow,
-    minimizeWindow,
-  } = useWindows();
+export default function Window({ name, title, children, onClose }: Props) {
+  const { active, focusWindow, minimizeWindow } = useWindows();
 
-  const [maximized, setMaximized] =
-    useState(false);
+  const [maximized, setMaximized] = useState(false);
 
   return (
     <Rnd
-      default={{
-        x: 200,
-        y: 70,
-        width: 900,
-        height: 560,
-      }}
+     default={{
+  x: window.innerWidth < 768 ? 10 : 80,
+  y: window.innerWidth < 768 ? 10 : 40,
+  width:
+    window.innerWidth < 768
+      ? window.innerWidth - 20
+      : Math.min(window.innerWidth * 0.82, 980),
+  height:
+    window.innerWidth < 768
+      ? window.innerHeight - 80
+      : Math.min(window.innerHeight * 0.78, 650),
+}}
       size={
         maximized
           ? {
@@ -63,16 +52,11 @@ export default function Window({
       enableResizing={!maximized}
       dragHandleClassName="window-header"
       bounds="window"
-      minWidth={600}
-      minHeight={400}
-      onMouseDown={() =>
-        focusWindow(name)
-      }
+      minWidth={300}
+      minHeight={200}
+      onMouseDown={() => focusWindow(name)}
       style={{
-        zIndex:
-          active === name
-            ? 999
-            : 100,
+        zIndex: active === name ? 999 : 100,
       }}
     >
       <div
@@ -116,15 +100,10 @@ export default function Window({
 
           transition
 
-          ${
-            active === name
-              ? "bg-violet-700"
-              : "bg-slate-800"
-          }
+          ${active === name ? "bg-violet-700" : "bg-slate-800"}
         `}
         >
           <div className="flex items-center gap-3">
-
             <div className="h-3 w-3 rounded-full bg-red-500" />
 
             <div className="h-3 w-3 rounded-full bg-yellow-500" />
@@ -134,15 +113,11 @@ export default function Window({
             <span className="ml-3 font-semibold tracking-wide text-white">
               {title}
             </span>
-
           </div>
 
           <div className="flex">
-
             <button
-              onClick={() =>
-                minimizeWindow(name)
-              }
+              onClick={() => minimizeWindow(name)}
               className="
                 flex
                 h-10
@@ -158,11 +133,7 @@ export default function Window({
             </button>
 
             <button
-              onClick={() =>
-                setMaximized(
-                  !maximized
-                )
-              }
+              onClick={() => setMaximized(!maximized)}
               className="
                 flex
                 h-10
@@ -192,7 +163,6 @@ export default function Window({
             >
               <LuX />
             </button>
-
           </div>
         </div>
 
@@ -213,7 +183,6 @@ export default function Window({
         >
           {children}
         </div>
-
       </div>
     </Rnd>
   );

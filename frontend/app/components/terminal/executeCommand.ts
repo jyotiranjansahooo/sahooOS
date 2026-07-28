@@ -1,6 +1,6 @@
 import { WindowName } from "@/app/context/WindowContext";
 
-type ExecuteArgs = {
+type Props = {
   command: string;
   openWindow: (name: WindowName) => void;
 };
@@ -8,21 +8,37 @@ type ExecuteArgs = {
 export function executeCommand({
   command,
   openWindow,
-}: ExecuteArgs): string {
-  switch (command) {
+}: Props) {
+  const cmd = command.trim();
+
+  switch (cmd) {
     case "help":
       return `Available Commands
 
 help
-profile
-projects
-contact
-skills
 about
+skills
+projects
+profile
+contact
 resume
+ls
+pwd
+clear
 github
-linkedin
-clear`;
+linkedin`;
+
+    case "ls":
+      return `Desktop
+
+Projects
+
+Resume.pdf
+
+Contact.txt`;
+
+    case "pwd":
+      return "/home/jyoti";
 
     case "profile":
       openWindow("profile");
@@ -36,43 +52,9 @@ clear`;
       openWindow("contact");
       return "Opening Contact...";
 
-    case "terminal":
-      openWindow("terminal");
-      return "";
-
-    case "about":
-      return `
-Jyoti Ranjan Sahoo
-
-Full Stack Developer
-
-Next.js
-React
-Node.js
-MongoDB
-Express
-Tailwind CSS
-`;
-
-    case "skills":
-      return `
-Frontend
----------
-Next.js
-React
-Tailwind
-
-Backend
----------
-Node
-Express
-MongoDB
-JWT
-`;
-
     case "resume":
       window.open("/resume.pdf");
-      return "Downloading Resume...";
+      return "Opening Resume...";
 
     case "github":
       window.open(
@@ -89,6 +71,11 @@ JWT
       return "Opening LinkedIn...";
 
     default:
-      return `Command not found: ${command}`;
+      return `Command not found : ${cmd}`;
   }
 }
+
+
+
+
+
