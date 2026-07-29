@@ -32,22 +32,20 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="h-screen overflow-hidden">
+      <body className="h-screen ">
         <ClerkProvider>
           <ProjectProvider>
+            <WindowProvider>
+              {children}
 
-          <WindowProvider>
-            {children}
-
-            <Toaster
-              position="bottom-right"
-              toastOptions={{
-                duration: 3000,
-              }}
-            />
-          </WindowProvider>
+              <Toaster
+                position="bottom-right"
+                toastOptions={{
+                  duration: 3000,
+                }}
+              />
+            </WindowProvider>
           </ProjectProvider>
-
         </ClerkProvider>
       </body>
     </html>

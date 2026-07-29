@@ -1,6 +1,7 @@
 "use client";
 
 import { KeyboardEvent, useState } from "react";
+import { FiPlus, FiX } from "react-icons/fi";
 
 type Props = {
   value: string[];
@@ -32,9 +33,7 @@ export default function FeaturesInput({
     onChange(value.filter((_, i) => i !== index));
   }
 
-  function handleKeyDown(
-    e: KeyboardEvent<HTMLInputElement>
-  ) {
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
       addFeature();
@@ -42,51 +41,95 @@ export default function FeaturesInput({
   }
 
   return (
-    <div className="space-y-4">
-      <label className="block text-sm font-semibold text-white">
-        Features
-      </label>
+    <div className="space-y-5">
+      <div>
+        <label className="mb-2 block text-sm font-medium text-zinc-300">
+          Features
+        </label>
 
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Type a feature and press Enter"
-        className="
-          w-full
-          rounded-xl
-          border
-          border-white/10
-          bg-black/20
-          px-4
-          py-3
-          text-white
-          outline-none
-          focus:border-violet-500
-        "
-      />
-
-      <div className="flex flex-wrap gap-2">
-        {value.map((feature, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => removeFeature(index)}
+        <div className="flex gap-3">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="JWT Authentication, Admin Dashboard..."
             className="
-              rounded-full
-              bg-emerald-600
+              flex-1
+              rounded-lg
+              border
+              border-zinc-700
+              bg-zinc-950
               px-4
-              py-2
+              py-3
               text-sm
               text-white
+              placeholder:text-zinc-500
+              outline-none
               transition
-              hover:bg-red-500
+              focus:border-violet-500
+              focus:ring-2
+              focus:ring-violet-500/20
+            "
+          />
+
+          <button
+            type="button"
+            onClick={addFeature}
+            className="
+              flex
+              items-center
+              justify-center
+              rounded-lg
+              bg-violet-600
+              px-5
+              transition
+              hover:bg-violet-500
             "
           >
-            {feature} ✕
+            <FiPlus size={18} />
           </button>
-        ))}
+        </div>
       </div>
+
+      {value.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {value.map((feature, index) => (
+            <span
+              key={index}
+              className="
+                flex
+                items-center
+                gap-2
+                rounded-full
+                border
+                border-zinc-700
+                bg-zinc-800
+                px-3
+                py-1.5
+                text-sm
+                text-zinc-200
+              "
+            >
+              {feature}
+
+              <button
+                type="button"
+                onClick={() => removeFeature(index)}
+                className="
+                  rounded-full
+                  p-1
+                  text-zinc-400
+                  transition
+                  hover:bg-red-500
+                  hover:text-white
+                "
+              >
+                <FiX size={14} />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
