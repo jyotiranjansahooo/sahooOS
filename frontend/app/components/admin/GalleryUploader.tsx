@@ -153,10 +153,10 @@ hover:text-red-600                    "
                     <FiTrash2 size={16} />
                   </button>
                   {images.length >= MAX_IMAGES && (
-  <p className="text-center text-sm font-medium text-red-500">
-    Maximum 5 gallery images uploaded.
-  </p>
-)}
+                    <p className="text-center text-sm font-medium text-red-500">
+                      Maximum 5 gallery images uploaded.
+                    </p>
+                  )}
                 </div>
               </div>
             ))}

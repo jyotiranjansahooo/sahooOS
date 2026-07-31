@@ -2,6 +2,7 @@
 
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { AppId } from "@/app/data/apps";
+import type { Project } from "@/app/types/project";
 
 export type WindowName = AppId;
 
@@ -12,11 +13,22 @@ type WindowState = {
 
 type ContextType = {
   windows: Record<WindowName, WindowState>;
+
   active: WindowName | null;
-  openWindow: (name: WindowName) => void;
+
+  selectedProject: Project | null;
+
+  openWindow: (
+    name: WindowName,
+    project?: Project
+  ) => void;
+
   closeWindow: (name: WindowName) => void;
+
   minimizeWindow: (name: WindowName) => void;
+
   restoreWindow: (name: WindowName) => void;
+
   focusWindow: (name: WindowName) => void;
 };
 
@@ -48,18 +60,23 @@ const initialWindows: Record<WindowName, WindowState> = {
     minimized: false,
   },
 
-  // projectDetails: {
-  //   opened: false,
-  //   minimized: false,
-  // },
+  projectDetails: {
+    opened: false,
+    minimized: false,
+  },
 };
 
 export function WindowProvider({ children }: { children: ReactNode }) {
   const [windows, setWindows] = useState(initialWindows);
 
   const [active, setActive] = useState<WindowName | null>(null);
+  const [selectedProject, setSelectedProject] =
+  useState<Project | null>(null);
 
-  function openWindow(name: WindowName) {
+  function openWindow(
+  name: WindowName,
+  project?: Project
+) {
     setWindows((prev) => ({
       ...prev,
       [name]: {
@@ -67,7 +84,9 @@ export function WindowProvider({ children }: { children: ReactNode }) {
         minimized: false,
       },
     }));
-
+if (project) {
+  setSelectedProject(project);
+}
     setActive(name);
   }
 
@@ -115,13 +134,14 @@ export function WindowProvider({ children }: { children: ReactNode }) {
     () => ({
       windows,
       active,
+      selectedProject,
       openWindow,
       closeWindow,
       minimizeWindow,
       restoreWindow,
       focusWindow,
     }),
-    [windows, active],
+    [windows, active, selectedProject]
   );
 
   return (

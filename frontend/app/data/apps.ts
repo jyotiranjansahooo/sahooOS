@@ -11,6 +11,7 @@ import ProjectsWindow from "@/app/components/windows/ProjectsWindow";
 import TerminalWindow from "@/app/components/windows/TerminalWindow";
 import ContactWindow from "@/app/components/windows/ContactWindow";
 import ResumeWindow from "@/app/components/windows/ResumeWindow";
+import ProjectDetailsWindow from "../components/windows/ProjectDetailsWindow";
 
 export const apps = [
   {
@@ -48,13 +49,13 @@ export const apps = [
     component: ResumeWindow,
   },
 
-  // {
-  //   id: "projectDetails",
-  //   title: "Project",
-  //   icon: LuFolderOpen,
-  //   component: ProjectDetailsWindow,
-  //   hidden: true,
-  // },
+  {
+    id: "projectDetails",
+    title: "Project",
+    icon: LuFolderOpen,
+    component: ProjectDetailsWindow,
+    hidden: true,
+  },
 ] as const;
 
 export type AppId = (typeof apps)[number]["id"];

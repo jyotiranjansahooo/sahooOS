@@ -1,37 +1,48 @@
 "use client";
 
+import { LuFolder } from "react-icons/lu";
+
 type Props = {
   name: string;
+  selected: boolean;
+  onSelect: () => void;
   onOpen: () => void;
 };
 
 export default function ExplorerItem({
   name,
+  selected,
+  onSelect,
   onOpen,
 }: Props) {
   return (
-    <button
+    <div
+      onClick={onSelect}
       onDoubleClick={onOpen}
-      className="
+      className={`
         flex
-        w-full
+        cursor-default
         items-center
         gap-3
         rounded-lg
-        p-3
+        px-3
+        py-2
+        transition-all
+        duration-200
 
-        transition
-
-        hover:bg-white/10
-      "
+        ${
+          selected
+            ? "bg-violet-600 text-white"
+            : "hover:bg-slate-800"
+        }
+      `}
     >
-      <span className="text-2xl">
-        📁
-      </span>
+      <LuFolder
+        size={20}
+        className={selected ? "text-white" : "text-yellow-400"}
+      />
 
-      <span className="text-white">
-        {name}
-      </span>
-    </button>
+      <span className="truncate">{name}</span>
+    </div>
   );
 }
