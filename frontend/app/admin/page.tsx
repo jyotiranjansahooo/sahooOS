@@ -7,44 +7,52 @@ import {
   FiArrowRight,
   FiPlus,
 } from "react-icons/fi";
+// import { useRouter } from "next/navigation";
+
 
 export default function AdminPage() {
+// const router = useRouter();
   return (
-    <div className="space-y-10 font-serif font-bold">
+    <div className="space-y-12 lg:space-y-14">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
-        <div className="py-6 my-6">
-          <h1 className="text-4xl font-bold text-[#1F2937]">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-[#1F2937] sm:text-4xl lg:text-5xl">
             Dashboard
           </h1>
 
+          <p className="mt-2 text-gray-500">
+            Welcome back. Manage your portfolio from here.
+          </p>
         </div>
 
         <Link
           href="/admin/projects/new"
           className="
-          inline-flex
-          items-center
-          gap-2
-          rounded-xl
-          bg-[#7BAE73]
-          px-8
-          py-5
-          font-semibold
-          text-white
-          transition
-          hover:bg-[#689961]
-        "
+            inline-flex
+            w-full
+            items-center
+            justify-center
+            gap-2
+            rounded-xl
+            bg-[#7BAE73]
+            px-6
+            py-3
+            font-semibold
+            text-white
+            transition
+            hover:bg-[#689961]
+            sm:w-auto
+          "
         >
           <FiPlus />
-
           Add Project
         </Link>
       </div>
 
       {/* Stats */}
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           icon={<FiFolder size={22} />}
           title="Projects"
@@ -72,120 +80,140 @@ export default function AdminPage() {
 
       {/* Quick Actions */}
 
-      <div className="rounded-3xl border border-[#DDE8D8] bg-white p-8 shadow-sm">
+      <section className="rounded-3xl border border-[#DDE8D8] bg-white p-8 shadow-sm">
         <h2 className="text-2xl font-semibold text-[#1F2937]">
           Quick Actions
         </h2>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
-          <Link
+        <p className="mt-2 text-gray-500">
+          Frequently used administrator tools.
+        </p>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <ActionCard
+            title="Manage Projects"
+            description="View, edit and delete existing portfolio projects."
             href="/admin/projects"
-            className="
-            rounded-2xl
-            border
-            border-[#DDE8D8]
-            p-6
-            transition
-            hover:border-[#7BAE73]
-            hover:bg-[#F7FBF5]
-          "
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">
-                  Manage Projects
-                </h3>
+          />
 
-                <p className="mt-2 text-sm text-[#6B7280]">
-                  View, edit and delete projects.
-                </p>
-              </div>
-
-              <FiArrowRight size={22} />
-            </div>
-          </Link>
-
-          <Link
+          <ActionCard
+            title="Add New Project"
+            description="Create and publish a new portfolio project."
             href="/admin/projects/new"
-            className="
-            rounded-2xl
-            border
-            border-[#DDE8D8]
-            p-6
-            transition
-            hover:border-[#7BAE73]
-            hover:bg-[#F7FBF5]
-          "
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">
-                  Add New Project
-                </h3>
-
-                <p className="mt-2 text-sm text-[#6B7280]">
-                  Publish another portfolio project.
-                </p>
-              </div>
-
-              <FiArrowRight size={22} />
-            </div>
-          </Link>
+          />
         </div>
-      </div>
+      </section>
 
       {/* Recent Projects */}
 
-      <div className="rounded-3xl border border-[#DDE8D8] bg-white shadow-sm">
-        <div className="flex items-center justify-between border-b border-[#DDE8D8] p-6">
-          <h2 className="text-2xl font-semibold">
-            Recent Projects
-          </h2>
+      <section className="rounded-3xl border border-[#DDE8D8] bg-white shadow-sm">
+        <div className="flex items-center justify-between border-b border-[#DDE8D8] px-8 py-6">
+          <div>
+            <h2 className="text-2xl font-semibold">
+              Recent Projects
+            </h2>
 
-          <Link
-            href="/admin/projects"
-            className="text-[#7BAE73] font-semibold"
-          >
-            View All
-          </Link>
+            <p className="mt-1 text-sm text-gray-500">
+              Your latest published projects.
+            </p>
+          </div>
+
+         <Link
+  href="/admin/projects"
+  className="font-semibold text-[#7BAE73] hover:underline"
+>
+  View All
+</Link>
         </div>
 
-        <div className="flex h-56 items-center justify-center text-center">
-          <div>
-            <FiFolder
-              className="mx-auto text-[#7BAE73]"
-              size={48}
-            />
+        <div className="flex min-h-[340px] items-center justify-center p-10">
+          <div className="text-center">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#EEF6EA]">
+              <FiFolder
+                size={42}
+                className="text-[#7BAE73]"
+              />
+            </div>
 
-            <h3 className="mt-5 text-xl font-semibold">
-              No projects yet
+            <h3 className="mt-6 text-2xl font-semibold text-[#1F2937]">
+              No Projects Yet
             </h3>
 
-            <p className="mt-2 text-[#6B7280]">
-              Your published projects will appear here.
+            <p className="mt-3 max-w-md text-gray-500">
+              Once you publish projects they will appear here.
             </p>
 
             <Link
               href="/admin/projects/new"
               className="
-              mt-6
-              inline-flex
-              rounded-xl
-              bg-[#7BAE73]
-              px-6
-              py-3
-              font-semibold
-              text-white
-              transition
-              hover:bg-[#689961]
-            "
+                mt-8
+                inline-flex
+                items-center
+                gap-2
+                rounded-xl
+                bg-[#7BAE73]
+                px-6
+                py-3
+                font-semibold
+                text-white
+                transition
+                hover:bg-[#689961]
+              "
             >
+              <FiPlus />
+
               Create First Project
             </Link>
           </div>
         </div>
-      </div>
+      </section>
     </div>
+  );
+}
+
+function ActionCard({
+  title,
+  description,
+  href,
+}: {
+  title: string;
+  description: string;
+  href: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="
+        group
+        rounded-2xl
+        border
+        border-[#DDE8D8]
+        bg-[#FAFCF8]
+        p-7
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        hover:border-[#7BAE73]
+        hover:shadow-md
+      "
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-[#1F2937]">
+            {title}
+          </h3>
+
+          <p className="mt-3 text-sm leading-6 text-gray-500">
+            {description}
+          </p>
+        </div>
+
+        <FiArrowRight
+          size={24}
+          className="transition-transform group-hover:translate-x-1"
+        />
+      </div>
+    </Link>
   );
 }
 
@@ -199,18 +227,31 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div className="rounded-3xl border border-[#DDE8D8] bg-white p-7 shadow-sm">
+    <div
+      className="
+        rounded-3xl
+        border
+        border-[#DDE8D8]
+        bg-white
+        p-8
+        shadow-sm
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        hover:shadow-lg
+      "
+    >
       <div className="flex items-center justify-between">
-        <div className="rounded-xl bg-[#EEF6EA] p-3 text-[#7BAE73]">
+        <div className="rounded-2xl bg-[#EEF6EA] p-4 text-[#7BAE73]">
           {icon}
         </div>
 
-        <span className="text-4xl font-bold text-[#1F2937]">
+        <span className="text-3xl font-bold text-[#1F2937] md:text-4xl">
           {value}
         </span>
       </div>
 
-      <p className="mt-6 text-sm font-medium text-[#6B7280]">
+      <p className="mt-6 text-base font-medium text-gray-500">
         {title}
       </p>
     </div>

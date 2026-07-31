@@ -1,28 +1,30 @@
 "use client";
 
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import ImageUploader from "../ImageUploader";
 import TechnologiesInput from "./TechnologiesInput";
 import FeaturesInput from "./FeaturesInput";
 import type { ProjectFormValues } from "@/app/types/projectForm";
-import { createProject } from "@/app/services/projectService";
+import { createProject, updateProject } from "@/app/services/projectService";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import GalleryUploader from "../GalleryUploader";
+import type { Project } from "@/app/types/project";
 
-const cardClass = "rounded-2xl border border-[#DDE8D8] bg-white p-8 shadow-sm";
+const cardClass = "rounded-2xl border border-[#FAFCF8] bg-white p-12 shadow-sm";
 
 const inputClass = `
-mt-2
+mt-6
 w-full
 rounded-xl
 border
 border-[#DDE8D8]
 bg-[#FAFCF8]
-px-4
-py-3.5
-text-sm
+px-6
+py-6
+text-md
 text-[#1F2937]
 placeholder:text-[#9CA3AF]
 outline-none
@@ -32,9 +34,13 @@ focus:ring-4
 focus:ring-[#7BAE73]/20
 `;
 
-const labelClass = "mb-2 block text-sm font-semibold text-[#374151]";
+const labelClass = "mb-6 block text-lg font-semibold text-[#1F2937]";
+type Props = {
+  initialData?: Project;
+  isEdit?: boolean;
+};
 
-export default function ProjectForm() {
+export default function ProjectForm({ initialData, isEdit = false }: Props) {
   const router = useRouter();
   const {
     register,
@@ -43,392 +49,398 @@ export default function ProjectForm() {
     setValue,
     formState: { errors },
   } = useForm<ProjectFormValues>({
-    defaultValues: {
+    defaultValues: initialData ?? {
       title: "",
       slug: "",
       shortDescription: "",
       description: "",
-
       thumbnail: "",
       images: [],
-
       githubUrl: "",
       liveUrl: "",
-
       technologies: [],
       features: [],
-
       featured: false,
-
       category: "Full Stack",
-
       status: "Draft",
-
       order: 0,
-
       metaTitle: "",
       metaDescription: "",
     },
   });
 
-  const [thumbnail, setThumbnail] = useState("");
-  const [gallery, setGallery] = useState<string[]>([]);
+  const [thumbnail, setThumbnail] = useState(initialData?.thumbnail ?? "");
+  const [gallery, setGallery] = useState<string[]>(initialData?.images ?? []);
 
   const technologies = watch("technologies");
   const features = watch("features");
 
   async function onSubmit(data: ProjectFormValues) {
     try {
+      data.thumbnail = thumbnail || initialData?.thumbnail || "";
+
+      data.images = gallery.length > 0 ? gallery : initialData?.images || [];
+
+      console.log("Submitting:", data);
       data.thumbnail = thumbnail;
       data.images = gallery;
 
-      await createProject(data);
-      toast.success("Project created successfully!");
+      console.log(data);
+      let response;
+
+      if (isEdit && initialData?._id) {
+        response = await updateProject(initialData._id, data);
+      } else {
+        response = await createProject(data);
+      }
+      console.log("Submitting data:", data);
+
+      console.log("API Response:", response);
+      toast.success(
+        isEdit
+          ? "Project updated successfully"
+          : "Project created successfully",
+      );
+
       router.push("/admin/projects");
-    } catch (error) {
-      toast.error("Failed to create project. Please try again.");
+      router.refresh();
+    } catch (error: unknown) {
+      console.error(error);
+
+      if (axios.isAxiosError(error)) {
+        console.log("Status:", error.response?.status);
+        console.log("Response:", error.response?.data);
+
+        toast.error(
+          error.response?.data?.message || "Failed to create project.",
+        );
+      } else {
+        toast.error("Something went wrong.");
+      }
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#7BAE73] font-sans text-gray-900">
-      <div className="mx-auto  max-w-5xl px-8 py-10 sm:px-8 sm:py-12">
+    <div className="font-sans text-gray-900">
+      <div
+        className="mx-auto
+  max-w-325
+  space-y-10
+  px-4
+  sm:px-6
+  lg:px-10
+  xl:px-14
+"
+      >
         <div className="mb-10">
-  <h1 className="text-4xl font-bold text-[#1F2937]">
-    Add Project
-  </h1>
+          <h1 className="text-4xl font-bold text-[#1F2937]">
+            {isEdit ? "Edit Project" : "Add Project"}
+          </h1>
 
-  <p className="mt-2 text-[#6B7280]">
-    Create and publish a new project for your portfolio.
-  </p>
-</div>
+          <p className="mt-2 text-[#6B7280]">
+            {isEdit
+              ? "Update your existing project."
+              : "Create and publish a new project for your portfolio."}
+          </p>
+        </div>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-10 sm:space-y-12"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-14 pb-40">
           {/* BASIC INFORMATION */}
-         <section className={cardClass}>
-  <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
-    Project Information
-  </h2>
+          <section className={cardClass}>
+            <h2 className="mb-8 pb-8 text-4xl font-bold text-center text-[#0c1624]">
+              Project Information
+            </h2>
+            <label className={labelClass}>Title</label>
+            <div className="grid gap-6 lg:grid-cols-2">
+              <input
+                {...register("title", {
+                  required: "Project title is required",
+                })}
+                placeholder="Green basket"
+                className={inputClass}
+              />
 
-  <div className="grid gap-6 lg:grid-cols-2">
-    <div>
-      <label className={labelClass}>
-        Project Title
-      </label>
+              {errors.title && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.title.message}
+                </p>
+              )}
+              <div>
+                <label className={labelClass}>Slug</label>
+                <input
+                  {...register("slug")}
+                  placeholder="green-basket"
+                  className={inputClass}
+                />
+              </div>
+            </div>
 
-      <input
-        {...register("title")}
-        placeholder="Green Basket"
-        className={inputClass}
-      />
-    </div>
+            <div className="mt-6">
+              <label className={labelClass}>Short Description</label>
 
-    <div>
-      <label className={labelClass}>
-        Slug
-      </label>
+              <textarea
+                rows={4}
+                {...register("shortDescription", {
+                  required: "description required",
+                })}
+                placeholder="A short summary of your project..."
+                className={inputClass}
+              />
+              {errors.title && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.title.message}
+                </p>
+              )}
+            </div>
 
-      <input
-        {...register("slug")}
-        placeholder="green-basket"
-        className={inputClass}
-      />
-    </div>
-  </div>
+            <div className="mt-6">
+              <label className={labelClass}>Full Description</label>
 
-  <div className="mt-6">
-    <label className={labelClass}>
-      Short Description
-    </label>
-
-    <textarea
-      rows={3}
-      {...register("shortDescription")}
-      placeholder="A short summary of your project..."
-      className={inputClass}
-    />
-  </div>
-
-  <div className="mt-6">
-    <label className={labelClass}>
-      Full Description
-    </label>
-
-    <textarea
-      rows={6}
-      {...register("description")}
-      placeholder="Describe your project, features, technologies, challenges and implementation..."
-      className={`${inputClass} resize-none`}
-    />
-  </div>
-</section>
+              <textarea
+                rows={10}
+                {...register("description")}
+                placeholder="Describe your project, features, technologies, challenges and implementation..."
+                className={`${inputClass} resize-none`}
+              />
+            </div>
+          </section>
 
           {/* THUMBNAIL & GALLERY */}
-         {/* IMAGES */}
+          {/* IMAGES */}
 
-<section className={cardClass}>
-  <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
-    Images
-  </h2>
+          <section className={cardClass}>
+            <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
+              Images
+            </h2>
 
-  <div className="grid gap-8 lg:grid-cols-2">
-    {/* Thumbnail */}
+            <div className="grid gap-10 xl:grid-cols-2">
+              {/* Thumbnail */}
 
-    <div>
-      <h3 className="mb-4 text-lg font-semibold text-[#374151]">
-        Thumbnail
-      </h3>
+              <div>
+                <h3 className="mb-4 text-lg font-semibold text-[#374151]">
+                  Thumbnail
+                </h3>
 
-      <p className="mb-5 text-sm text-gray-500">
-        Upload the main image that represents your project.
-      </p>
+                <p className="mb-5 text-sm text-gray-500">
+                  Upload the main image that represents your project.
+                </p>
 
-      <ImageUploader
-        onUpload={(url) => {
-          setThumbnail(url);
-        }}
-      />
-    </div>
+                <ImageUploader
+  initialImage={thumbnail}
+  onUpload={(url) => {
+    setThumbnail(url);
+  }}
+/>
+              </div>
 
-    {/* Gallery */}
+              {/* Gallery */}
 
-    <div>
-      <h3 className="mb-4 text-lg font-semibold text-[#374151]">
-        Gallery Images
-      </h3>
+              <div>
+                <h3 className="mb-4 text-lg font-semibold text-[#374151]">
+                  Gallery Images
+                </h3>
 
-      <p className="mb-5 text-sm text-gray-500">
-        Upload screenshots of your project.
-      </p>
+                <p className="mb-5 text-sm text-gray-500">
+                  Upload screenshots of your project.
+                </p>
 
-      <GalleryUploader
-        images={gallery}
-        onChange={setGallery}
-      />
-    </div>
-  </div>
-</section>
+                <GalleryUploader
+                  images={gallery}
+                  onChange={setGallery}
+                  className="rounded-3xl bg-white p-6"
+                />
+              </div>
+            </div>
+          </section>
 
           {/* TECH & FEATURES */}
-          <div className="grid gap-8 lg:grid-cols-2">
-           <section className={cardClass}>
-  <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
-    Technologies & Features
-  </h2>
 
-  <div className="grid gap-8 lg:grid-cols-2">
-    <div>
-      <TechnologiesInput
-        value={technologies}
-        onChange={(value) =>
-          setValue("technologies", value)
-        }
-      />
-    </div>
+          <section className={cardClass}>
+            <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
+              Technologies & Features
+            </h2>
 
-    <div>
-      <FeaturesInput
-        value={features}
-        onChange={(value) =>
-          setValue("features", value)
-        }
-      />
-    </div>
-  </div>
-</section>
-          </div>
+            <div className="grid bg-amber-50 gap-10 xl:grid-cols-2">
+              <div>
+                <TechnologiesInput
+                  value={technologies}
+                  onChange={(value) => setValue("technologies", value)}
+                />
+              </div>
+
+              <div>
+                <FeaturesInput
+                  value={features}
+                  onChange={(value) => setValue("features", value)}
+                />
+              </div>
+            </div>
+          </section>
 
           {/* LINKS */}
 
-<section className={cardClass}>
-  <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
-    Project Links
-  </h2>
+          <section className={`${cardClass} mt-4`}>
+            <h2 className="mb-8 mt-6 text-2xl font-bold text-[#1F2937]">
+              Project Links
+            </h2>
 
-  <div className="grid gap-6 lg:grid-cols-2">
-    <div>
-      <label className={labelClass}>
-        GitHub Repository
-      </label>
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div>
+                <label className={labelClass}>GitHub Repository</label>
 
-      <input
-        {...register("githubUrl")}
-        placeholder="https://github.com/username/project"
-        className={inputClass}
-      />
-    </div>
+                <input
+                  {...register("githubUrl", {
+                    required: "link required",
+                  })}
+                  placeholder="https://github.com/username/project"
+                  className={inputClass}
+                />
+              </div>
 
-    <div>
-      <label className={labelClass}>
-        Live Website
-      </label>
+              <div>
+                <label className={labelClass}>Live Website</label>
 
-      <input
-        {...register("liveUrl")}
-        placeholder="https://greenbasket.com"
-        className={inputClass}
-      />
-    </div>
-  </div>
-</section>
+                <input
+                  {...register("liveUrl")}
+                  placeholder="https://greenbasket.com"
+                  className={inputClass}
+                />
+              </div>
+            </div>
+          </section>
 
           {/* SETTINGS */}
-       {/* PROJECT SETTINGS */}
+          {/* PROJECT SETTINGS */}
 
-<section className={cardClass}>
-  <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
-    Project Settings
-  </h2>
+          <section className={cardClass}>
+            <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
+              Project Settings
+            </h2>
 
-  <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div>
+                <label className={labelClass}>Category</label>
 
-    <div>
-      <label className={labelClass}>
-        Category
-      </label>
+                <input
+                  {...register("category")}
+                  placeholder="Full Stack"
+                  className={inputClass}
+                />
+              </div>
 
-      <input
-        {...register("category")}
-        placeholder="Full Stack"
-        className={inputClass}
-      />
-    </div>
+              <div>
+                <label className={labelClass}>Status</label>
 
-    <div>
-      <label className={labelClass}>
-        Status
-      </label>
+                <select {...register("status")} className={inputClass}>
+                  <option value="Draft">Draft</option>
 
-      <select
-        {...register("status")}
-        className={inputClass}
-      >
-        <option value="Draft">
-          Draft
-        </option>
+                  <option value="Published">Published</option>
+                </select>
+              </div>
 
-        <option value="Published">
-          Published
-        </option>
-      </select>
-    </div>
+              <div>
+                <label className={labelClass}>Display Order</label>
 
-    <div>
-      <label className={labelClass}>
-        Display Order
-      </label>
+                <input
+                  type="number"
+                  {...register("order", {
+                    valueAsNumber: true,
+                  })}
+                  placeholder="1"
+                  className={inputClass}
+                />
+              </div>
 
-      <input
-        type="number"
-        {...register("order", {
-          valueAsNumber: true,
-        })}
-        placeholder="1"
-        className={inputClass}
-      />
-    </div>
-
-    <div className="flex items-center gap-4 pt-10">
-
-      <input
-        type="checkbox"
-        {...register("featured")}
-        className="
+              <div className="flex items-center gap-4 pt-10">
+                <input
+                  type="checkbox"
+                  {...register("featured")}
+                  className="
         h-5
         w-5
         rounded
         border-[#7BAE73]
         text-[#7BAE73]
       "
-      />
+                />
 
-      <span className="font-medium text-[#374151]">
-        Show as Featured Project
-      </span>
-
-    </div>
-
-  </div>
-</section>
-
-     {/* SEO */}
-
-<section className={cardClass}>
-  <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
-    SEO Metadata
-  </h2>
-
-  <div className="space-y-6">
-
-    <div>
-      <label className={labelClass}>
-        Meta Title
-      </label>
-
-      <input
-        {...register("metaTitle")}
-        placeholder="Green Basket | Full Stack Marketplace"
-        className={inputClass}
-      />
-    </div>
-
-    <div>
-      <label className={labelClass}>
-        Meta Description
-      </label>
-
-      <textarea
-        rows={4}
-        {...register("metaDescription")}
-        placeholder="SEO description for search engines..."
-        className={`${inputClass} resize-none`}
-      />
-    </div>
-
-  </div>
-</section>
+                <span className="font-medium text-[#374151]">
+                  Show as Featured Project
+                </span>
+              </div>
+            </div>
+          </section>
 
           {/* SEO */}
+          <section className={`${cardClass} mt-4`}>
+            <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
+              SEO Metadata
+            </h2>
 
-<section className={cardClass}>
-  <h2 className="mb-8 text-2xl font-semibold text-[#1F2937]">
-    SEO Metadata
-  </h2>
+            <div className="space-y-6">
+              <div>
+                <label className={labelClass}>Meta Title</label>
 
-  <div className="space-y-6">
+                <input
+                  {...register("metaTitle")}
+                  placeholder="Green Basket | Full Stack Marketplace"
+                  className={inputClass}
+                />
+              </div>
 
-    <div>
-      <label className={labelClass}>
-        Meta Title
-      </label>
+              <div>
+                <label className={labelClass}>Meta Description</label>
 
-      <input
-        {...register("metaTitle")}
-        placeholder="Green Basket | Full Stack Marketplace"
-        className={inputClass}
-      />
-    </div>
-
-    <div>
-      <label className={labelClass}>
-        Meta Description
-      </label>
-
-      <textarea
-        rows={4}
-        {...register("metaDescription")}
-        placeholder="SEO description for search engines..."
-        className={`${inputClass} resize-none`}
-      />
-    </div>
-
-  </div>
-</section>
+                <textarea
+                  rows={4}
+                  {...register("metaDescription")}
+                  placeholder="SEO description for search engines..."
+                  className={`${inputClass} resize-none`}
+                />
+              </div>
+            </div>
+          </section>
+          <div
+            className="
+    sticky
+    bottom-0
+    z-30
+    -mx-10
+    mt-16
+    border-t
+    border-[#93bb80]
+    bg-white/95
+    px-10
+    py-5
+    backdrop-blur
+    
+  "
+          >
+            <div className="flex h-8 w-36 px-10 py-5 justify-center">
+              <button
+                type="submit"
+                className="
+        rounded-xl
+        bg-[#4ba83d]
+        px-10
+        py-4
+        text-base
+        font-semibold
+        text-white
+        shadow-md
+        transition-all
+        duration-200
+        hover:bg-[#3c8f31]
+        hover:shadow-lg
+      "
+              >
+                {isEdit ? "Update Project" : "Save Project"}
+              </button>
+            </div>
+          </div>
         </form>
       </div>
+      <div className="h-[20vh]" />
     </div>
   );
 }

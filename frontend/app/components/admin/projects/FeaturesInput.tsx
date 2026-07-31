@@ -41,34 +41,34 @@ export default function FeaturesInput({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-300">
+        <label className="mb-3 block text-sm font-semibold text-[#374151]">
           Features
         </label>
 
-        <div className="flex gap-3">
+        <div className="flex items-stretch gap-3">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="JWT Authentication, Admin Dashboard..."
             className="
+              h-14
               flex-1
-              rounded-lg
+              rounded-xl
               border
-              border-zinc-700
-              bg-zinc-950
-              px-4
-              py-3
-              text-sm
-              text-white
-              placeholder:text-zinc-500
+              border-[#DDE8D8]
+              bg-[#F7FBF5]
+              px-5
+              text-[#1F2937]
+              placeholder:text-[#9CA3AF]
               outline-none
-              transition
-              focus:border-violet-500
-              focus:ring-2
-              focus:ring-violet-500/20
+              transition-all
+              duration-200
+              focus:border-[#7BAE73]
+              focus:ring-4
+              focus:ring-[#7BAE73]/20
             "
           />
 
@@ -77,22 +77,24 @@ export default function FeaturesInput({
             onClick={addFeature}
             className="
               flex
+              h-14
+              w-14
               items-center
               justify-center
-              rounded-lg
-              bg-violet-600
-              px-5
+              rounded-xl
+              bg-[#7BAE73]
+              text-white
               transition
-              hover:bg-violet-500
+              hover:bg-[#689961]
             "
           >
-            <FiPlus size={18} />
+            <FiPlus size={22} />
           </button>
         </div>
       </div>
 
       {value.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3">
           {value.map((feature, index) => (
             <span
               key={index}
@@ -102,12 +104,13 @@ export default function FeaturesInput({
                 gap-2
                 rounded-full
                 border
-                border-zinc-700
-                bg-zinc-800
-                px-3
-                py-1.5
+                border-[#DDE8D8]
+                bg-[#EEF6EA]
+                px-4
+                py-2
                 text-sm
-                text-zinc-200
+                font-medium
+                text-[#374151]
               "
             >
               {feature}
@@ -116,12 +119,16 @@ export default function FeaturesInput({
                 type="button"
                 onClick={() => removeFeature(index)}
                 className="
+                  flex
+                  h-6
+                  w-6
+                  items-center
+                  justify-center
                   rounded-full
-                  p-1
-                  text-zinc-400
+                  text-[#6B7280]
                   transition
-                  hover:bg-red-500
-                  hover:text-white
+                  hover:bg-red-100
+                  hover:text-red-600
                 "
               >
                 <FiX size={14} />

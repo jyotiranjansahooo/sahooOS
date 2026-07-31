@@ -1,11 +1,11 @@
-import Project from "../models/Project.js";
+import ProjectModel from "../models/ProjectModel.js";
 
-// ==========================
+// =====================================
 // GET ALL PROJECTS
-// ==========================
+// =====================================
 export const getProjects = async (req, res) => {
   try {
-    const projects = await Project.find().sort({
+    const projects = await ProjectModel.find().sort({
       order: 1,
       createdAt: -1,
     });
@@ -25,14 +25,14 @@ export const getProjects = async (req, res) => {
   }
 };
 
-// ==========================
+// =====================================
 // GET SINGLE PROJECT
-// ==========================
+// =====================================
 export const getProject = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const project = await Project.findById(id);
+    const project = await ProjectModel.findById(id);
 
     if (!project) {
       return res.status(404).json({
@@ -55,12 +55,12 @@ export const getProject = async (req, res) => {
   }
 };
 
-// ==========================
+// =====================================
 // CREATE PROJECT
-// ==========================
+// =====================================
 export const createProject = async (req, res) => {
   try {
-    const project = await Project.create(req.body);
+    const project = await ProjectModel.create(req.body);
 
     res.status(201).json({
       success: true,
@@ -77,17 +77,21 @@ export const createProject = async (req, res) => {
   }
 };
 
-// ==========================
+// =====================================
 // UPDATE PROJECT
-// ==========================
+// =====================================
 export const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const project = await Project.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const project = await ProjectModel.findByIdAndUpdate(
+      id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!project) {
       return res.status(404).json({
@@ -111,14 +115,14 @@ export const updateProject = async (req, res) => {
   }
 };
 
-// ==========================
+// =====================================
 // DELETE PROJECT
-// ==========================
+// =====================================
 export const deleteProject = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const project = await Project.findById(id);
+    const project = await ProjectModel.findById(id);
 
     if (!project) {
       return res.status(404).json({

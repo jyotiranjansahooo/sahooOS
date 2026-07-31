@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
-import { AppId, apps } from "@/app/data/apps";
+import { AppId } from "@/app/data/apps";
 
 export type WindowName = AppId;
 
@@ -12,33 +12,47 @@ type WindowState = {
 
 type ContextType = {
   windows: Record<WindowName, WindowState>;
-
   active: WindowName | null;
-
   openWindow: (name: WindowName) => void;
-
   closeWindow: (name: WindowName) => void;
-
   minimizeWindow: (name: WindowName) => void;
-
   restoreWindow: (name: WindowName) => void;
-
   focusWindow: (name: WindowName) => void;
 };
 
 const WindowContext = createContext<ContextType | null>(null);
 
-const initialWindows = apps.reduce(
-  (acc, app) => {
-    acc[app.id] = {
-      opened: false,
-      minimized: false,
-    };
-
-    return acc;
+const initialWindows: Record<WindowName, WindowState> = {
+  profile: {
+    opened: false,
+    minimized: false,
   },
-  {} as Record<WindowName, WindowState>
-);
+
+  projects: {
+    opened: false,
+    minimized: false,
+  },
+
+  terminal: {
+    opened: false,
+    minimized: false,
+  },
+
+  contact: {
+    opened: false,
+    minimized: false,
+  },
+
+  resume: {
+    opened: false,
+    minimized: false,
+  },
+
+  // projectDetails: {
+  //   opened: false,
+  //   minimized: false,
+  // },
+};
 
 export function WindowProvider({ children }: { children: ReactNode }) {
   const [windows, setWindows] = useState(initialWindows);

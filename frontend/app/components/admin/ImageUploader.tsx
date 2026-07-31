@@ -10,10 +10,11 @@ import { useState } from "react";
 
 type Props = {
   onUpload: (url: string) => void;
+  initialImage?: string;
 };
 
-export default function ImageUploader({ onUpload }: Props) {
-  const [preview, setPreview] = useState("");
+export default function ImageUploader({ onUpload, initialImage = "" }: Props) {
+  const [preview, setPreview] = useState(initialImage);
 
   function removeImage() {
     setPreview("");
@@ -36,6 +37,7 @@ export default function ImageUploader({ onUpload }: Props) {
               setPreview(url);
 
               onUpload(url);
+              console.log("Uploaded thumbnail:", url);
             }
           }}
         >
@@ -44,35 +46,47 @@ export default function ImageUploader({ onUpload }: Props) {
               type="button"
               onClick={() => open()}
               className="
-                flex
-                w-full
-                flex-col
-                items-center
-                justify-center
-                rounded-xl
-                border-2
-                border-dashed
-                border-zinc-700
-                bg-zinc-900
-                px-6
-                py-20
-                transition
-                hover:border-violet-500
-                hover:bg-zinc-800
-              "
+  flex
+  min-h-[280px]
+  w-full
+  flex-col
+  items-center
+  justify-center
+  rounded-2xl
+  border-2
+  border-dashed
+  border-[#A7D7A0]
+  bg-[#F7FBF5]
+  px-8
+  py-12
+  transition-all
+  duration-300
+  hover:border-[#7BAE73]
+  hover:bg-[#EEF6EA]
+"
             >
-              <FiUploadCloud size={60} className="text-violet-400" />
+              <FiUploadCloud size={64} className="text-[#7BAE73]" />
+              <h3 className="mt-6 text-2xl font-semibold text-[#1F2937]">
+                Upload Thumbnail
+              </h3>
 
-              <h3 className="mt-6 text-2xl font-semibold">Upload Thumbnail</h3>
-
-              <p className="mt-3 text-base text-gray-500">
+              <p className="mt-3 text-base text-[#6B7280]">
                 Click to upload your project thumbnail.
               </p>
             </button>
           )}
         </CldUploadWidget>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
+        <div
+          className="
+    overflow-hidden
+    rounded-2xl
+    border
+    border-[#DDE8D8]
+    bg-[#F7FBF5]
+    shadow-sm
+  "
+        >
           <div className="relative aspect-video w-full">
             <Image
               src={preview}
@@ -83,8 +97,8 @@ export default function ImageUploader({ onUpload }: Props) {
             />
           </div>
 
-          <div className="flex items-center justify-between border-t border-zinc-800 p-4">
-            <div className="flex items-center gap-2 text-sm text-zinc-300">
+          <div className="flex items-center justify-between border-t border-[#DDE8D8] bg-white p-5">
+            <div className="flex items-center gap-2 text-sm font-medium text-[#6B7280]">
               <FiImage />
               Thumbnail Uploaded
             </div>
@@ -103,6 +117,7 @@ export default function ImageUploader({ onUpload }: Props) {
                     setPreview(url);
 
                     onUpload(url);
+                    console.log("Uploaded thumbnail:", url);
                   }
                 }}
               >
@@ -111,14 +126,16 @@ export default function ImageUploader({ onUpload }: Props) {
                     type="button"
                     onClick={() => open()}
                     className="
-                      rounded-lg
-                      bg-violet-600
-                      px-4
-                      py-2
-                      text-sm
-                      transition
-                      hover:bg-violet-500
-                    "
+  rounded-xl
+  bg-[#7BAE73]
+  px-5
+  py-2.5
+  text-sm
+  font-medium
+  text-white
+  transition
+  hover:bg-[#689961]
+"
                   >
                     Replace
                   </button>
@@ -129,17 +146,17 @@ export default function ImageUploader({ onUpload }: Props) {
                 type="button"
                 onClick={removeImage}
                 className="
-                  rounded-lg
-                  border
-                  border-red-500/40
-                  px-4
-                  py-2
-                  text-sm
-                  text-red-400
-                  transition
-                  hover:bg-red-500
-                  hover:text-white
-                "
+  rounded-xl
+  border
+  border-red-200
+  bg-red-50
+  px-4
+  py-2.5
+  text-sm
+  text-red-600
+  transition
+  hover:bg-red-100
+"
               >
                 <FiTrash2 />
               </button>

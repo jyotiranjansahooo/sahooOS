@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState,useEffect } from "react";
 import { Rnd } from "react-rnd";
 import { LuMinus, LuSquare, LuX } from "react-icons/lu";
 
@@ -15,50 +15,84 @@ type Props = {
 
 export default function Window({ name, title, children, onClose }: Props) {
   const { active, focusWindow, minimizeWindow } = useWindows();
+const [position, setPosition] = useState({ x: 80, y: 40 });
 
+const [size, setSize] = useState({
+  width: 980,
+  height: 650,
+});
   const [maximized, setMaximized] = useState(false);
 
+useEffect(() => {
+  function updateWindow() {
+    const mobile = window.innerWidth < 768;
+
+    setPosition({
+      x: mobile ? 10 : 80,
+      y: mobile ? 10 : 40,
+    });
+
+    setSize({
+      width: mobile
+        ? window.innerWidth - 20
+        : Math.min(window.innerWidth * 0.82, 980),
+
+      height: mobile
+        ? window.innerHeight - 80
+        : Math.min(window.innerHeight * 0.78, 650),
+    });
+  }
+
+  updateWindow();
+
+  window.addEventListener("resize", updateWindow);
+
+  return () => window.removeEventListener("resize", updateWindow);
+}, []);
+
   return (
-    <Rnd
-     default={{
-  x: window.innerWidth < 768 ? 10 : 80,
-  y: window.innerWidth < 768 ? 10 : 40,
-  width:
-    window.innerWidth < 768
-      ? window.innerWidth - 20
-      : Math.min(window.innerWidth * 0.82, 980),
-  height:
-    window.innerWidth < 768
-      ? window.innerHeight - 80
-      : Math.min(window.innerHeight * 0.78, 650),
-}}
-      size={
-        maximized
-          ? {
-              width: "100%",
-              height: "calc(100% - 56px)",
-            }
-          : undefined
-      }
-      position={
-        maximized
-          ? {
-              x: 0,
-              y: 0,
-            }
-          : undefined
-      }
-      disableDragging={maximized}
-      enableResizing={!maximized}
-      dragHandleClassName="window-header"
-      bounds="window"
-      minWidth={300}
-      minHeight={200}
-      onMouseDown={() => focusWindow(name)}
-      style={{
-        zIndex: active === name ? 999 : 100,
-      }}
-    >
+ <Rnd
+  size={
+    maximized
+      ? {
+          width: "100%",
+          height: "calc(100% - 56px)",
+        }
+      : size
+  }
+  position={
+    maximized
+      ? {
+          x: 0,
+          y: 0,
+        }
+      : position
+  }
+  onDragStop={(e, d) => {
+    setPosition({
+      x: d.x,
+      y: d.y,
+    });
+  }}
+  onResizeStop={(e, direction, ref, delta, pos) => {
+    setSize({
+      width: ref.offsetWidth,
+      height: ref.offsetHeight,
+    });
+
+    setPosition(pos);
+  }}
+  disableDragging={maximized}
+  enableResizing={!maximized}
+  dragHandleClassName="window-header"
+  bounds="window"
+  minWidth={300}
+  minHeight={200}
+  onMouseDown={() => focusWindow(name)}
+  style={{
+    zIndex: active === name ? 999 : 100,
+  }}
+>
       <div
         className="
         flex
