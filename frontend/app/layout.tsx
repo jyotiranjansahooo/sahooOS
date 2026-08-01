@@ -6,6 +6,8 @@ import "@fontsource/press-start-2p";
 import { WindowProvider } from "./context/WindowContext";
 import { Toaster } from "react-hot-toast";
 import { ProjectProvider } from "./context/ProjectContext";
+// import { DesktopProvider } from "@/app/context/DesktopContext";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,22 +34,24 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="h-screen ">
-        <ClerkProvider>
-          <ProjectProvider>
-            <WindowProvider>
-              {children}
+      <body className="h-screen">
+  <ClerkProvider>
+    <ProjectProvider>
+      {/* <DesktopProvider> */}
+        <WindowProvider>
+          {children}
 
-              <Toaster
-                position="bottom-right"
-                toastOptions={{
-                  duration: 3000,
-                }}
-              />
-            </WindowProvider>
-          </ProjectProvider>
-        </ClerkProvider>
-      </body>
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              duration: 3000,
+            }}
+          />
+        </WindowProvider>
+      {/* </DesktopProvider> */}
+    </ProjectProvider>
+  </ClerkProvider>
+</body>
     </html>
   );
 }

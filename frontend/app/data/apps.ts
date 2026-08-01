@@ -49,13 +49,13 @@ export const apps = [
     component: ResumeWindow,
   },
 
-  {
-    id: "projectDetails",
-    title: "Project",
-    icon: LuFolderOpen,
-    component: ProjectDetailsWindow,
-    hidden: true,
-  },
+  // {
+  //   id: "projectDetails",
+  //   title: "Project",
+  //   icon: LuFolderOpen,
+  //   component: ProjectDetailsWindow,
+  //   hidden: true,
+  // },
 ] as const;
 
 export type AppId = (typeof apps)[number]["id"];

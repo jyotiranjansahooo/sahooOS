@@ -2,7 +2,7 @@
 
 import toast from "react-hot-toast";
 
-import DesktopIcon from "./DesktopIcon";
+import DraggableDesktopIcon from "./DraggableDesktopIcon";
 
 import { apps } from "@/app/data/apps";
 
@@ -42,31 +42,15 @@ export default function DesktopGrid() {
   return (
     <section
       className="
-      absolute
-
-     left-3
-top-3
-
-sm:left-5
-sm:top-6
-
-lg:left-6
-lg:top-8
-
-gap-4
-sm:gap-5
-lg:gap-6
-
-      z-20
-
-      flex
-
-      flex-col
-
-    "
+absolute
+inset-0
+overflow-hidden
+z-20
+"
     >
       {apps.map((app) => (
-        <DesktopIcon
+        <DraggableDesktopIcon
+          id={app.id}
           key={app.id}
           title={app.title}
           icon={app.icon}
