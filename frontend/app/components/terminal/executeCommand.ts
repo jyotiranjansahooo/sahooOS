@@ -23,6 +23,8 @@ profile
 contact
 resume
 ls
+cls
+project
 pwd
 clear
 github
@@ -45,6 +47,10 @@ Contact.txt`;
       return "Opening Profile...";
 
     case "projects":
+      openWindow("projects");
+      return "Opening Projects...";
+      
+    case "project":
       openWindow("projects");
       return "Opening Projects...";
 

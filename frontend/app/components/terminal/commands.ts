@@ -6,7 +6,9 @@ help
 about
 skills
 projects
+project
 resume
+cv
 contact
 clear
 `,
@@ -24,7 +26,7 @@ Node.js
 Express
 MongoDB
 TypeScript
-Tailwind CSS
+Tailwind CSS ...
 `,
 
   skills: `
@@ -54,11 +56,26 @@ Vercel
 Projects
 
 1. Green Basket
-2. SahooOS
-3. Portfolio
+2. BOOAI
+3. SahooOS
+4. RoadHelp
+`,
+ project: `
+Projects
+
+1. Green Basket
+2. BOOAI
+3. SahooOS
+4. RoadHelp
 `,
 
   resume: `
+Resume.pdf
+
+Use Resume desktop icon
+to download it.
+`,
+CgViewCols: `
 Resume.pdf
 
 Use Resume desktop icon
@@ -68,14 +85,14 @@ to download it.
   contact: `
 Email
 
-your@email.com
+jyotiranjansahoo038@gmail.com
 
 GitHub
 
-github.com/yourusername
+https://github.com/jyotiranjansahooo
 
 LinkedIn
 
-linkedin.com/in/yourusername
+https://www.linkedin.com/in/jyoti-ranjan-sahoo-80bb6a36a/
 `,
 };
