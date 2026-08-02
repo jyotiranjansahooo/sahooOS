@@ -5,13 +5,6 @@ import authRoutes from "./routes/authRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 
 const app = express();
-
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "https://sahoo-os.vercel.app",
-];
-
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
