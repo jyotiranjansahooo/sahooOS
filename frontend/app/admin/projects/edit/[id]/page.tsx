@@ -3,12 +3,12 @@ import ProjectForm from "@/app/components/admin/projects/ProjectForm";
 import type { Project } from "@/app/types/project";
 
 async function getProject(id: string): Promise<Project | null> {
-  const res = await fetch(
-    `http://localhost:5000/api/projects/${id}`,
-    {
-      cache: "no-store",
-    }
-  );
+const res = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${id}`,
+  {
+    cache: "no-store",
+  }
+);
 
   if (!res.ok) return null;
 

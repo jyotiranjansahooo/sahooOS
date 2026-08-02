@@ -3,12 +3,12 @@ import ProjectsTable from "@/app/components/admin/projects/ProjectsTable";
 import type { Project } from "@/app/types/project";
 
 async function getProjects(): Promise<Project[]> {
-  const res = await fetch(
-    "http://localhost:5000/api/projects",
-    {
-      cache: "no-store",
-    }
-  );
+const res = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/api/projects`,
+  {
+    cache: "no-store",
+  }
+);
 
   const data = await res.json();
 

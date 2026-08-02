@@ -10,10 +10,10 @@ type ContactData = {
 export async function sendContactMessage(
   data: ContactData
 ) {
-  const response = await axios.post(
-    "http://localhost:5000/api/contact",
-    data
-  );
+const response = await axios.post(
+  `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+  data
+);
 
   return response.data;
 }
