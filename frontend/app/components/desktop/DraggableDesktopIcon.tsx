@@ -14,10 +14,7 @@ type Props = {
   onDoubleClick: () => void;
 };
 
-const DEFAULT_POSITIONS: Record<
-  string,
-  { x: number; y: number }
-> = {
+const DEFAULT_POSITIONS: Record<string, { x: number; y: number }> = {
   profile: { x: 30, y: 30 },
   projects: { x: 30, y: 150 },
   terminal: { x: 30, y: 270 },
@@ -47,19 +44,16 @@ export default function DraggableDesktopIcon({
   useEffect(() => {
     if (!iconRef.current) return;
 
-   const position =
-  DEFAULT_POSITIONS[id] ?? {
-    x: 30,
-    y: 30,
-  };
+    const position = DEFAULT_POSITIONS[id] ?? {
+      x: 30,
+      y: 30,
+    };
 
     iconRef.current.style.left = `${position.x}px`;
     iconRef.current.style.top = `${position.y}px`;
   }, [id]);
 
-  function handleMouseDown(
-    e: React.MouseEvent<HTMLDivElement>
-  ) {
+  function handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
     if (e.button !== 0 || !iconRef.current) return;
 
     dragging.current = false;
@@ -79,69 +73,41 @@ export default function DraggableDesktopIcon({
       const dx = ev.clientX - start.current.mouseX;
       const dy = ev.clientY - start.current.mouseY;
 
-      if (
-        !dragging.current &&
-        Math.hypot(dx, dy) > 5
-      ) {
+      if (!dragging.current && Math.hypot(dx, dy) > 5) {
         dragging.current = true;
       }
 
       if (!dragging.current) return;
 
-      const x = Math.max(
-        0,
-        start.current.left + dx
-      );
+      const x = Math.max(0, start.current.left + dx);
 
-      const y = Math.max(
-        0,
-        start.current.top + dy
-      );
+      const y = Math.max(0, start.current.top + dy);
 
       iconRef.current.style.left = `${x}px`;
       iconRef.current.style.top = `${y}px`;
     }
 
     function handleUp() {
-      if (
-        dragging.current &&
-        iconRef.current
-      ) {
+      if (dragging.current && iconRef.current) {
         localStorage.setItem(
           `desktop-${id}`,
           JSON.stringify({
-            x: parseFloat(
-              iconRef.current.style.left
-            ),
-            y: parseFloat(
-              iconRef.current.style.top
-            ),
-          })
+            x: parseFloat(iconRef.current.style.left),
+            y: parseFloat(iconRef.current.style.top),
+          }),
         );
       }
 
       dragging.current = false;
 
-      window.removeEventListener(
-        "mousemove",
-        handleMove
-      );
+      window.removeEventListener("mousemove", handleMove);
 
-      window.removeEventListener(
-        "mouseup",
-        handleUp
-      );
+      window.removeEventListener("mouseup", handleUp);
     }
 
-    window.addEventListener(
-      "mousemove",
-      handleMove
-    );
+    window.addEventListener("mousemove", handleMove);
 
-    window.addEventListener(
-      "mouseup",
-      handleUp
-    );
+    window.addEventListener("mouseup", handleUp);
   }
 
   return (
