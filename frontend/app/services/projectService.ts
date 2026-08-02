@@ -3,10 +3,9 @@ import type { ProjectFormValues } from "@/app/types/projectForm";
 import type { Project } from "@/app/types/project";
 
 const API = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
   withCredentials: true,
 });
-console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
 
 export async function getProjects() {
   const { data } = await API.get("/projects");
@@ -23,10 +22,7 @@ export async function createProject(project: ProjectFormValues) {
   return data;
 }
 
-export async function updateProject(
-  id: string,
-  project: Partial<Project>
-) {
+export async function updateProject(id: string, project: Partial<Project>) {
   const { data } = await API.put(`/projects/${id}`, project);
   return data;
 }
