@@ -27,3 +27,26 @@ img {
 button {
   cursor: pointer;
 }
+
+
+
+/* ===== Section Title ===== */
+
+.section-title {
+  @apply relative inline-block font-bold tracking-tight text-white;
+}
+
+.section-title::after {
+  content: "";
+
+  @apply absolute left-0 -bottom-3 h-1 w-24 rounded-full;
+
+  background: linear-gradient(
+    90deg,
+    #8b5cf6,
+    #d946ef,
+    #a855f7
+  );
+
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.9);
+}

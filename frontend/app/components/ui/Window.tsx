@@ -202,17 +202,25 @@ export default function Window({ name, title, children, onClose }: Props) {
 
         {/* BODY */}
 
-       <div
+       {/* BODY */}
+
+<div
   className="
-  flex-1
-  min-h-0
-  overflow-hidden
-  bg-[#0F172A]
-  text-white
-"
+    flex-1
+    min-h-0
+
+    overflow-y-auto
+    overflow-x-hidden
+
+    bg-[#0F172A]
+
+    p-8
+
+    text-white
+  "
 >
-          {children}
-        </div>
+  {children}
+</div>
       </div>
     </Rnd>
   );
