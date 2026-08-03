@@ -9,8 +9,7 @@ type Props = {
   onBack?: () => void;
 };
 
-const sectionTitle =
-  "relative mb-5 mt-10 inline-block text-xl font-bold tracking-wide text-white after:absolute after:-bottom-2 after:left-0 after:h-[3px] after:w-14 after:rounded-full after:bg-violet-500 after:shadow-[0_0_12px_#8b5cf6]";
+const sectionTitle =  "relative mb-5 mt-10 inline-block text-xl font-bold tracking-wide text-white after:absolute after:-bottom-2 after:left-0 after:h-[3px] after:w-14 after:rounded-full after:bg-violet-500 after:shadow-[0_0_12px_#8b5cf6]";
 
 export default function ProjectPreview({ project, mode, onBack }: Props) {
   if (!project) {

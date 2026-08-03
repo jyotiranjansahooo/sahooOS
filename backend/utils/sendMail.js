@@ -1,24 +1,19 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-export default async function sendMail({ name, email, subject, message }) {
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-  try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      replyTo: email,
-      subject: `📩 Portfolio Contact | ${subject}`,
-      html: `
+export default async function sendMail({
+  name,
+  email,
+  subject,
+  message,
+}) {
+  const { data, error } = await resend.emails.send({
+    from: "Portfolio Contact <onboarding@resend.dev>",
+    to: process.env.EMAIL_USER,
+    replyTo: email,
+    subject: `📩 Portfolio Contact | ${subject}`,
+    html: `
       <h2>New Portfolio Contact</h2>
 
       <p><strong>Name:</strong> ${name}</p>
@@ -29,11 +24,12 @@ export default async function sendMail({ name, email, subject, message }) {
 
       <p>${message.replace(/\n/g, "<br/>")}</p>
     `,
-    });
+  });
 
-  } catch (err) {
-    console.error("sendMail error:");
-    console.error(err);
-    throw err;
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
   }
+
+  return data;
 }
