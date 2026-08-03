@@ -81,11 +81,10 @@ export default function ProjectForm({ initialData, isEdit = false }: Props) {
 
       data.images = gallery.length > 0 ? gallery : initialData?.images || [];
 
-      console.log("Submitting:", data);
+     
       data.thumbnail = thumbnail;
       data.images = gallery;
 
-      console.log(data);
       let response;
 
       if (isEdit && initialData?._id) {
@@ -93,9 +92,6 @@ export default function ProjectForm({ initialData, isEdit = false }: Props) {
       } else {
         response = await createProject(data);
       }
-      console.log("Submitting data:", data);
-
-      console.log("API Response:", response);
       toast.success(
         isEdit
           ? "Project updated successfully"
@@ -108,8 +104,6 @@ export default function ProjectForm({ initialData, isEdit = false }: Props) {
       console.error(error);
 
       if (axios.isAxiosError(error)) {
-        console.log("Status:", error.response?.status);
-        console.log("Response:", error.response?.data);
 
         toast.error(
           error.response?.data?.message || "Failed to create project.",

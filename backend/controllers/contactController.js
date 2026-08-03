@@ -3,7 +3,6 @@ import sendMail from "../utils/sendMail.js";
 
 export const sendContact = async (req, res) => {
  try {
-   console.log(req.body);
     const { name, email, subject, message } = req.body;
 
     if (!name || !email || !subject || !message) {

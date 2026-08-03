@@ -10,9 +10,7 @@ export default function useProjects() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/projects`
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`);
 
         const data = await res.json();
 

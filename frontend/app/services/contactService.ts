@@ -7,13 +7,11 @@ type ContactData = {
   message: string;
 };
 
-export async function sendContactMessage(
-  data: ContactData
-) {
-const response = await axios.post(
-  `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
-  data
-);
+export async function sendContactMessage(data: ContactData) {
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+    data,
+  );
 
   return response.data;
 }

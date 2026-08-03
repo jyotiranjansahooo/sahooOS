@@ -43,7 +43,7 @@ export default function ContactWindow({
         </h4>
 
         <p className="text-slate-300">
-          jyotiranjansahoo@gmail.com
+          jyotiranjansahoo038@gmail.com
         </p>
 
       </div>

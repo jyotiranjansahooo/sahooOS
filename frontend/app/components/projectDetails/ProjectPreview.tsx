@@ -32,7 +32,6 @@ export default function ProjectPreview({ project, mode, onBack }: Props) {
   /* ==========================
       PREVIEW MODE
   ========================== */
-  console.log("ProjectPreview mode:", mode);
   if (mode === "preview") {
     return (
       <div className="space-y-8 p-6 lg:p-8">
