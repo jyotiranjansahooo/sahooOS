@@ -1,18 +1,13 @@
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-export default async function sendMail({
-  name,
-  email,
-  subject,
-  message,
-}) {
+subject: `🚀 TEST ${Date.now()}`;
+export default async function sendMail({ name, email, subject, message }) {
   const { data, error } = await resend.emails.send({
     from: "Portfolio Contact <onboarding@resend.dev>",
     to: process.env.EMAIL_USER,
     replyTo: email,
-    subject: `📩 Portfolio Contact | ${subject}`,
+    subject: `📩 sahoo-OS | ${subject} ${Date.now()}`,
     html: `
       <h2>New Portfolio Contact</h2>
 
